@@ -2,8 +2,8 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/wpcodevo/golang-gorm-postgres/controllers"
-	"github.com/wpcodevo/golang-gorm-postgres/middleware"
+	"github.com/projectlac/golang-gorm-postgres/controllers"
+	"github.com/projectlac/golang-gorm-postgres/middleware"
 )
 
 type AuthRouteController struct {
@@ -21,4 +21,6 @@ func (rc *AuthRouteController) AuthRoute(rg *gin.RouterGroup) {
 	router.POST("/login", rc.authController.SignInUser)
 	router.GET("/refresh", rc.authController.RefreshAccessToken)
 	router.GET("/logout", middleware.DeserializeUser(), rc.authController.LogoutUser)
+	router.GET("/verifyemail/:verificationCode", rc.authController.VerifyEmail)
+
 }
