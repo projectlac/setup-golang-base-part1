@@ -20,7 +20,7 @@ func (pc *OrderRouteController) OrderRoute(rg *gin.RouterGroup) {
 	router.Use(middleware.DeserializeUser())
 	router.POST("/", pc.orderController.CreateOrder)
 	router.GET("/", pc.orderController.FindOrders)
-	router.PUT("/:tableId", pc.orderController.UpdateOrder)
-	router.GET("/:tableId", pc.orderController.FindOrderById)
-	router.DELETE("/:tableId", pc.orderController.DeleteOrder)
+	router.PUT("/:orderId", pc.orderController.UpdateOrder)
+	router.GET("/:orderId", pc.orderController.FindOrderById)
+	router.DELETE("/:orderId", pc.orderController.DeleteOrder)
 }

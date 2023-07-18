@@ -19,8 +19,8 @@ var (
 	UserController      controllers.UserController
 	UserRouteController routes.UserRouteController
 
-	TableController      controllers.TableController
-	TableRouteController routes.TableRouteController
+	TableOrderController      controllers.TableOrderController
+	TableOrderRouteController routes.TableOrderRouteController
 
 	ProductController      controllers.ProductController
 	ProductRouteController routes.ProductRouteController
@@ -52,6 +52,9 @@ func init() {
 	CategoryController = controllers.NewCategoryController(initializers.DB)
 	CategoryRouteController = routes.NewRouteCategoryController(CategoryController)
 
+	TableOrderController = controllers.NewTableOrderController(initializers.DB)
+	TableOrderRouteController = routes.NewRouteTableOrderController(TableOrderController)
+
 	OrderController = controllers.NewOrderController(initializers.DB)
 	OrderRouteController = routes.NewRouteOrderController(OrderController)
 
@@ -78,7 +81,7 @@ func main() {
 
 	AuthRouteController.AuthRoute(router)
 	UserRouteController.UserRoute(router)
-	TableRouteController.TableRoute(router)
+	TableOrderRouteController.TableRoute(router)
 	CategoryRouteController.CategoryRoute(router)
 	ProductRouteController.ProductRoute(router)
 	OrderRouteController.OrderRoute(router)

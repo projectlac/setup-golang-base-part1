@@ -11,17 +11,17 @@ import (
 	"gorm.io/gorm"
 )
 
-type TableController struct {
+type TableOrderController struct {
 	DB *gorm.DB
 }
 
-func NewTableController(DB *gorm.DB) TableController {
-	return TableController{DB}
+func NewTableOrderController(DB *gorm.DB) TableOrderController {
+	return TableOrderController{DB}
 }
 
-func (pc *TableController) CreateTable(ctx *gin.Context) {
+func (pc *TableOrderController) CreateTableOrder(ctx *gin.Context) {
 	currentUser := ctx.MustGet("currentUser").(models.User)
-	var payload *models.CreateTableRequest
+	var payload *models.CreateTableOrderRequest
 
 	if err := ctx.ShouldBindJSON(&payload); err != nil {
 		ctx.JSON(http.StatusBadRequest, err.Error())
@@ -29,7 +29,7 @@ func (pc *TableController) CreateTable(ctx *gin.Context) {
 	}
 
 	now := time.Now()
-	newPost := models.Table{
+	newPost := models.TableOrder{
 		TableName: payload.TableName,
 		User:      currentUser.ID,
 		CreatedAt: now,
@@ -48,40 +48,40 @@ func (pc *TableController) CreateTable(ctx *gin.Context) {
 }
 
 // [...] Update Post Handler
-func (pc *TableController) UpdateTable(ctx *gin.Context) {
-	tableId := ctx.Param("tableId")
+func (pc *TableOrderController) UpdateTableOrder(ctx *gin.Context) {
+	tableOrderId := ctx.Param("tableOrderId")
 	currentUser := ctx.MustGet("currentUser").(models.User)
 
-	var payload *models.UpdateTable
+	var payload *models.UpdateTableOrder
 	if err := ctx.ShouldBindJSON(&payload); err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"status": "fail", "message": err.Error()})
 		return
 	}
-	var updatedTable models.Table
-	result := pc.DB.First(&updatedTable, "id = ?", tableId)
+	var updatedTableOrder models.TableOrder
+	result := pc.DB.First(&updatedTableOrder, "id = ?", tableOrderId)
 	if result.Error != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"status": "fail", "message": "No post with that title exists"})
 		return
 	}
 	now := time.Now()
-	categoryToUpdate := models.Table{
+	categoryToUpdate := models.TableOrder{
 		TableName: payload.TableName,
 		User:      currentUser.ID,
-		CreatedAt: updatedTable.CreatedAt,
+		CreatedAt: updatedTableOrder.CreatedAt,
 		UpdatedAt: now,
 	}
 
-	pc.DB.Model(&updatedTable).Updates(categoryToUpdate)
+	pc.DB.Model(&updatedTableOrder).Updates(categoryToUpdate)
 
-	ctx.JSON(http.StatusOK, gin.H{"status": "success", "data": updatedTable})
+	ctx.JSON(http.StatusOK, gin.H{"status": "success", "data": updatedTableOrder})
 }
 
 // [...] Get Single Post Handler
-func (pc *TableController) FindTableById(ctx *gin.Context) {
-	tableId := ctx.Param("tableId")
+func (pc *TableOrderController) FindTableOrderById(ctx *gin.Context) {
+	tableOrderId := ctx.Param("tableOrderId")
 
-	var category models.Table
-	result := pc.DB.First(&category, "id = ?", tableId)
+	var category models.TableOrder
+	result := pc.DB.First(&category, "id = ?", tableOrderId)
 	if result.Error != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"status": "fail", "message": "No post with that title exists"})
 		return
@@ -91,7 +91,7 @@ func (pc *TableController) FindTableById(ctx *gin.Context) {
 }
 
 // [...] Get All Posts Handler
-func (pc *TableController) FindTables(ctx *gin.Context) {
+func (pc *TableOrderController) FindTableOrders(ctx *gin.Context) {
 	var page = ctx.DefaultQuery("page", "1")
 	var limit = ctx.DefaultQuery("limit", "10")
 
@@ -99,7 +99,7 @@ func (pc *TableController) FindTables(ctx *gin.Context) {
 	intLimit, _ := strconv.Atoi(limit)
 	offset := (intPage - 1) * intLimit
 
-	var categories []models.Table
+	var categories []models.TableOrder
 	results := pc.DB.Limit(intLimit).Offset(offset).Find(&categories)
 	if results.Error != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{"status": "error", "message": results.Error})
@@ -110,10 +110,10 @@ func (pc *TableController) FindTables(ctx *gin.Context) {
 }
 
 // [...] Delete Post Handler
-func (pc *TableController) DeleteTable(ctx *gin.Context) {
-	tableId := ctx.Param("tableId")
+func (pc *TableOrderController) DeleteTableOrder(ctx *gin.Context) {
+	tableOrderId := ctx.Param("tableOrderId")
 
-	result := pc.DB.Delete(&models.Table{}, "id = ?", tableId)
+	result := pc.DB.Delete(&models.TableOrder{}, "id = ?", tableOrderId)
 
 	if result.Error != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"status": "fail", "message": "No post with that title exists"})
