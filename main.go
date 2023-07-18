@@ -19,8 +19,17 @@ var (
 	UserController      controllers.UserController
 	UserRouteController routes.UserRouteController
 
-	PostController      controllers.PostController
-	PostRouteController routes.PostRouteController
+	TableController      controllers.TableController
+	TableRouteController routes.TableRouteController
+
+	ProductController      controllers.ProductController
+	ProductRouteController routes.ProductRouteController
+
+	OrderController      controllers.OrderController
+	OrderRouteController routes.OrderRouteController
+
+	CategoryController      controllers.CategoryController
+	CategoryRouteController routes.CategoryRouteController
 )
 
 func init() {
@@ -37,8 +46,14 @@ func init() {
 	UserController = controllers.NewUserController(initializers.DB)
 	UserRouteController = routes.NewRouteUserController(UserController)
 
-	PostController = controllers.NewPostController(initializers.DB)
-	PostRouteController = routes.NewRoutePostController(PostController)
+	ProductController = controllers.NewProductController(initializers.DB)
+	ProductRouteController = routes.NewRouteProductController(ProductController)
+
+	CategoryController = controllers.NewCategoryController(initializers.DB)
+	CategoryRouteController = routes.NewRouteCategoryController(CategoryController)
+
+	OrderController = controllers.NewOrderController(initializers.DB)
+	OrderRouteController = routes.NewRouteOrderController(OrderController)
 
 	server = gin.Default()
 }
@@ -63,6 +78,10 @@ func main() {
 
 	AuthRouteController.AuthRoute(router)
 	UserRouteController.UserRoute(router)
-	PostRouteController.PostRoute(router)
+	TableRouteController.TableRoute(router)
+	CategoryRouteController.CategoryRoute(router)
+	ProductRouteController.ProductRoute(router)
+	OrderRouteController.OrderRoute(router)
+
 	log.Fatal(server.Run(":" + config.ServerPort))
 }
